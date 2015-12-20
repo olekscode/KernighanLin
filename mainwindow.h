@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStringList>
 #include <QStringListModel>
 
-//#include "graphgenerator.h"
+#include "graphgenerator.h"
 #include "graphcontroller.h"
 #include "graphdrawer.h"
 #include "kernighanlin.h"
@@ -24,11 +25,14 @@ public:
 
 private slots:
     void on_addVertexButton_clicked();
+    void on_addEdgeButton_clicked();
+    void loadVerticesNames();
+    void on_generateButton_clicked();
 
 private:
     Ui::MainWindow *ui;
 
-    //GraphGenerator* _graphGenerator;
+    GraphGenerator* _graphGenerator;
     GraphController* _graphController;
     GraphDrawer* _graphDrawer;
     KernighanLin* _kernighanLin;

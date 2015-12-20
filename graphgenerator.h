@@ -1,10 +1,20 @@
 #ifndef GRAPHGENERATOR_H
 #define GRAPHGENERATOR_H
 
-class GraphGenerator
+#include <QObject>
+
+#include "graphcontroller.h"
+
+class GraphGenerator : public QObject
 {
+    Q_OBJECT
+
+    GraphController* _graphController;
+
 public:
-    GraphGenerator();
+    GraphGenerator(GraphController* graphController);
+
+    void generate(int vertices, int edges);
 };
 
 #endif // GRAPHGENERATOR_H

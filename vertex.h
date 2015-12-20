@@ -3,11 +3,17 @@
 
 #include <QColor>
 
+// TEMPORARY
+#include <stdlib.h> // rand
+#include <time.h>   // time
+
+// TODO: Make it a child of QObject
+
 class Vertex
 {
     QColor _color;
-    int _x;
-    int _y;
+    qreal _x;
+    qreal _y;
 
 public:
     Vertex();
@@ -15,11 +21,11 @@ public:
     QColor color() const;
     void setColor(QColor color);
 
-    int x() const;
-    int y() const;
+    qreal x() const;
+    qreal y() const;
 
-    void setX(int x);
-    void setY(int y);
+    void setX(qreal x);
+    void setY(qreal y);
 };
 
 #endif // VERTEX_H

@@ -1,11 +1,15 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 
+#include <QObject>
+
 #include "algorythm.h"
 #include "systemmonitor.h"
 
-class Analyzer
+class Analyzer : public QObject
 {
+    Q_OBJECT
+
     Algorythm* _algorythm;
     SystemMonitor* _sysMonitor;
 

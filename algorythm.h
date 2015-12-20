@@ -1,8 +1,12 @@
 #ifndef ALGORYTHM_H
 #define ALGORYTHM_H
 
-class Algorythm
+#include <QObject>
+
+class Algorythm : public QObject
 {
+    Q_OBJECT
+
 public:
     Algorythm();
 };

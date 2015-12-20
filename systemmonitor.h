@@ -1,8 +1,12 @@
 #ifndef SYSTEMMONITOR_H
 #define SYSTEMMONITOR_H
 
-class SystemMonitor
+#include <QObject>
+
+class SystemMonitor : public QObject
 {
+    Q_OBJECT
+
 public:
     SystemMonitor();
 };

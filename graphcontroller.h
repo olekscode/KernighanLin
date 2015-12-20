@@ -1,11 +1,16 @@
 #ifndef GRAPHCONTROLLER_H
 #define GRAPHCONTROLLER_H
 
+#include <QObject>
+
 #include "graph.h"
 
-class GraphController
+class GraphController : public QObject
 {
+    Q_OBJECT
+
     Graph* _graph;
+    int _id_counter;
 
 public:
     GraphController();
@@ -16,8 +21,10 @@ public:
 
     Graph* graph() const;
 
-    void addVertex(QString id);
-    void addEdge(QString id1, QString id2, weight_t weight);
+    void addVertex(QString id = QString());
+    void addEdge(QString id1, QString id2, int weight);
+
+    QString suggestedId() const;
 };
 
 #endif // GRAPHCONTROLLER_H

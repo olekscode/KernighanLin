@@ -2,7 +2,7 @@
 
 Graph::Graph()
 {
-    _adj_mtrx = new weight_t*[0];
+    _adj_mtrx = new int*[0];
 }
 
 Graph::~Graph()
@@ -18,14 +18,15 @@ Graph::Graph(const Graph &other)
     _vertices = other._vertices;
 
     int n = (int) _vertices.size();
-    _adj_mtrx = new weight_t*[n];
+    _adj_mtrx = new int*[n];
 
     for (int i = 0; i < n; ++i) {
-        _adj_mtrx[i] = new weight_t[n];
+        _adj_mtrx[i] = new int[n];
 
         for (int j = 0; j < n; ++j) {
             _adj_mtrx[i][j] = other._adj_mtrx[i][j];
         }
+
     }
 }
 
@@ -34,10 +35,10 @@ Graph& Graph::operator= (const Graph& other)
     _vertices = other._vertices;
 
     int n = (int) _vertices.size();
-    _adj_mtrx = new weight_t*[n];
+    _adj_mtrx = new int*[n];
 
     for (int i = 0; i < n; ++i) {
-        _adj_mtrx[i] = new weight_t[n];
+        _adj_mtrx[i] = new int[n];
 
         for (int j = 0; j < n; ++j) {
             _adj_mtrx[i][j] = other._adj_mtrx[i][j];
@@ -58,7 +59,7 @@ void Graph::addVertex(QString id)
     _increase_adj_mtrx();
 }
 
-void Graph::connect(QString id1, QString id2, weight_t weight)
+void Graph::connect(QString id1, QString id2, int weight)
 {
     // TODO: Find a way to get an index of element by it's key
 
@@ -73,7 +74,7 @@ Vertex& Graph::operator[] (QString id)
     return _vertices[id];
 }
 
-weight_t Graph::weightBetween(QString id1, QString id2) const
+int Graph::weightBetween(QString id1, QString id2) const
 {
     int i1 = _index_of_vertex(id1);
     int i2 = _index_of_vertex(id2);
@@ -103,33 +104,34 @@ int Graph::_index_of_vertex(QString id) const
 void Graph::_increase_adj_mtrx()
 {
     int n = (int) _vertices.size();
-    weight_t** other = new weight_t*[n];
+    int** other = new int*[n];
 
     for (int i = 0; i < n - 1; ++i) {
-        other[i] = new weight_t[n];
+        other[i] = new int[n];
 
         for (int j = 0; j < n - 1; ++j) {
             other[i][j] = _adj_mtrx[i][j];
         }
         delete[] _adj_mtrx[i];
     }
-
     delete[] _adj_mtrx;
-    _adj_mtrx = other;
+
+    other[n - 1] = new int[n];
 
     for (int i = 0; i < n; ++i) {
-        _adj_mtrx[i][n - 1] = 0;
-        _adj_mtrx[n - 1][i] = 0;
+        other[i][n - 1] = 0;
+        other[n - 1][i] = 0;
     }
+    _adj_mtrx = other;
 }
 
 void Graph::_decrease_adj_mtrx()
 {
     int n = (int) _vertices.size();
-    weight_t** other = new weight_t*[n];
+    int** other = new int*[n];
 
     for (int i = 0; i < n; ++i) {
-        other[i] = new weight_t[n];
+        other[i] = new int[n];
 
         for (int j = 0; j < n; ++j) {
             other[i][j] = _adj_mtrx[i][j];

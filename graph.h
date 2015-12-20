@@ -1,18 +1,21 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <QObject>
 #include <QHash>
+#include <QVector>
+#include <QPair>
 #include <QDebug>
 
 #include "vertex.h"
 #include "exception.h"
 
-typedef int weight_t;
-
-class Graph
+class Graph : public QObject
 {
+    Q_OBJECT
+
     QHash<QString, Vertex> _vertices;
-    weight_t** _adj_mtrx;
+    int** _adj_mtrx;
 
 public:
     Graph();
@@ -25,11 +28,11 @@ public:
 
     // CREATE
     void addVertex(QString id);
-    void connect(QString id1, QString id2, weight_t weight);
+    void connect(QString id1, QString id2, int weight);
 
     // READ, UPDATE
     Vertex& operator[] (QString id);
-    weight_t weightBetween(QString id1, QString id2) const;
+    int weightBetween(QString id1, QString id2) const;
 
     // DELETE
     void deleteVertex(QString id);
