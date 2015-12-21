@@ -1,7 +1,9 @@
 #ifndef KERNIGHANLIN_H
 #define KERNIGHANLIN_H
 
-#include <QHash>
+#include <QString>
+#include <QList>
+#include <QDebug>
 
 #include "algorythm.h"
 #include "graph.h"
@@ -10,17 +12,22 @@
 class KernighanLin : public Algorythm
 {
     Graph* _graph;
+    QList<QString>* _subsets;
+    int _num_of_subsets;
 
 public:
     KernighanLin(Graph* graph);
 
-    int internalCost(Vertex v) const;
-    int externalCost(Vertex v) const;
-
-    int D(Vertex v) const;
-    int reduction(Vertex a, Vertex b) const;
-
     void run();
+
+private:
+    int _internal_cost(QString id, int si) const;
+    int _external_cost(QString id, int si) const;
+
+    int _D(QString id, int si) const;
+    int _reduction(QString id1, int si1, QString id2, int si2) const;
+
+    void _initial_partition();
 };
 
 #endif // KERNIGHANLIN_H

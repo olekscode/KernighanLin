@@ -17,6 +17,36 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _verticesNamesModel = new QStringListModel();
     loadVerticesNames();
+
+    ui->numOfThreadsSpin->setRange(1, 8);
+    ui->numOfThreadsSlider->setRange(
+                ui->numOfThreadsSpin->minimum(),
+                ui->numOfThreadsSpin->maximum());
+
+    ui->numOfPartitionsSpin->setRange(1, 10);
+    ui->numOfPartitionsSlider->setRange(
+                ui->numOfPartitionsSpin->minimum(),
+                ui->numOfPartitionsSpin->maximum());
+
+    connect(ui->numOfThreadsSpin,
+            SIGNAL(valueChanged(int)),
+            ui->numOfThreadsSlider,
+            SLOT(setValue(int)));
+
+    connect(ui->numOfThreadsSlider,
+            SIGNAL(valueChanged(int)),
+            ui->numOfThreadsSpin,
+            SLOT(setValue(int)));
+
+    connect(ui->numOfPartitionsSpin,
+            SIGNAL(valueChanged(int)),
+            ui->numOfPartitionsSlider,
+            SLOT(setValue(int)));
+
+    connect(ui->numOfPartitionsSlider,
+            SIGNAL(valueChanged(int)),
+            ui->numOfPartitionsSpin,
+            SLOT(setValue(int)));
 }
 
 MainWindow::~MainWindow()
@@ -34,8 +64,10 @@ void MainWindow::on_addVertexButton_clicked()
 {
     QString id = ui->vertexId->text();
     _graphController->addVertex(id);
-    _graphDrawer->drawVertex(id);
+    _graphController->completeConnectVertex(id);
     loadVerticesNames();
+
+    _graphDrawer->draw();
 }
 
 void MainWindow::on_addEdgeButton_clicked()
@@ -47,7 +79,6 @@ void MainWindow::on_addEdgeButton_clicked()
     // TODO: Set coordianates of vertices
 
     _graphController->addEdge(id1, id2, weight);
-    _graphDrawer->drawEdge(id1, id2);
 }
 
 void MainWindow::loadVerticesNames()
@@ -62,12 +93,12 @@ void MainWindow::loadVerticesNames()
 void MainWindow::on_generateButton_clicked()
 {
     int vertices = ui->numOfVertices->value();
-    int edges = ui->numOfEdges->value();
 
-    _graphGenerator->generate(vertices, edges);
+    _graphGenerator->generate(vertices);
+    _graphDrawer->draw();
+}
 
-    // TODO: Replace this with something better
-    foreach (QString id, _graphController->graph()->vertices().keys()) {
-        _graphDrawer->drawVertex(id);
-    }
+void MainWindow::on_runButton_clicked()
+{
+    _kernighanLin->run();
 }

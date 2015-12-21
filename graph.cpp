@@ -1,49 +1,10 @@
 #include "graph.h"
 
-Graph::Graph()
-{
-    _adj_mtrx = new int*[0];
-}
-
-Graph::~Graph()
-{
-    for (int i = 0; i < _vertices.size(); ++i) {
-        delete[] _adj_mtrx[i];
-    }
-    delete[] _adj_mtrx;
-}
-
-Graph::Graph(const Graph &other)
-{
-    _vertices = other._vertices;
-
-    int n = (int) _vertices.size();
-    _adj_mtrx = new int*[n];
-
-    for (int i = 0; i < n; ++i) {
-        _adj_mtrx[i] = new int[n];
-
-        for (int j = 0; j < n; ++j) {
-            _adj_mtrx[i][j] = other._adj_mtrx[i][j];
-        }
-
-    }
-}
-
 Graph& Graph::operator= (const Graph& other)
 {
     _vertices = other._vertices;
+    _adj_mtrx = other._adj_mtrx;
 
-    int n = (int) _vertices.size();
-    _adj_mtrx = new int*[n];
-
-    for (int i = 0; i < n; ++i) {
-        _adj_mtrx[i] = new int[n];
-
-        for (int j = 0; j < n; ++j) {
-            _adj_mtrx[i][j] = other._adj_mtrx[i][j];
-        }
-    }
     return *this;
 }
 
@@ -52,21 +13,26 @@ QHash<QString, Vertex> Graph::vertices() const
     return _vertices;
 }
 
+QHash<QString, QHash<QString, int>> Graph::weights() const
+{
+    return _adj_mtrx;
+}
+
 void Graph::addVertex(QString id)
 {
     _vertices.insert(id, Vertex());
-    qDebug() << _vertices.size();
-    _increase_adj_mtrx();
+
+    QHash<QString, int> last_row;
+    for (auto it = _adj_mtrx.begin(); it != _adj_mtrx.end(); ++it) {
+        last_row.insert(it.key(), 0);
+        it.value().insert(id, 0);
+    }
+    _adj_mtrx.insert(id, last_row);
 }
 
 void Graph::connect(QString id1, QString id2, int weight)
 {
-    // TODO: Find a way to get an index of element by it's key
-
-    int i1 = _index_of_vertex(id1);
-    int i2 = _index_of_vertex(id2);
-
-    _adj_mtrx[i1][i2] = weight;
+    _adj_mtrx[id1][id2] = _adj_mtrx[id2][id1] = weight;
 }
 
 Vertex& Graph::operator[] (QString id)
@@ -74,71 +40,23 @@ Vertex& Graph::operator[] (QString id)
     return _vertices[id];
 }
 
-int Graph::weightBetween(QString id1, QString id2) const
+int Graph::weight(QString id1, QString id2) const
 {
-    int i1 = _index_of_vertex(id1);
-    int i2 = _index_of_vertex(id2);
-
-    return _adj_mtrx[i1][i2];
+    return _adj_mtrx.value(id1).value(id2);
 }
 
 void Graph::deleteVertex(QString id)
 {
     _vertices.remove(id);
-    _decrease_adj_mtrx();
+
+    _adj_mtrx.erase(_adj_mtrx.end() - 1);
+    for (auto it = _adj_mtrx.begin(); it != _adj_mtrx.end(); ++it) {
+        it.value().erase(it.value().end() - 1);
+    }
 }
 
-int Graph::_index_of_vertex(QString id) const
+void Graph::clear()
 {
-    int index = 0;
-
-    for (auto i = _vertices.begin(); i != _vertices.end(); ++i) {
-        if (i.key() == id) {
-            return index;
-        }
-        ++index;
-    }
-    throw NoVertexException();
-}
-
-void Graph::_increase_adj_mtrx()
-{
-    int n = (int) _vertices.size();
-    int** other = new int*[n];
-
-    for (int i = 0; i < n - 1; ++i) {
-        other[i] = new int[n];
-
-        for (int j = 0; j < n - 1; ++j) {
-            other[i][j] = _adj_mtrx[i][j];
-        }
-        delete[] _adj_mtrx[i];
-    }
-    delete[] _adj_mtrx;
-
-    other[n - 1] = new int[n];
-
-    for (int i = 0; i < n; ++i) {
-        other[i][n - 1] = 0;
-        other[n - 1][i] = 0;
-    }
-    _adj_mtrx = other;
-}
-
-void Graph::_decrease_adj_mtrx()
-{
-    int n = (int) _vertices.size();
-    int** other = new int*[n];
-
-    for (int i = 0; i < n; ++i) {
-        other[i] = new int[n];
-
-        for (int j = 0; j < n; ++j) {
-            other[i][j] = _adj_mtrx[i][j];
-        }
-        delete[] _adj_mtrx[i];
-    }
-
-    delete[] _adj_mtrx;
-    _adj_mtrx = other;
+    _vertices.clear();
+    _adj_mtrx.clear();
 }

@@ -5,7 +5,6 @@
 
 // TEMPORARY
 #include <stdlib.h> // rand
-#include <time.h>   // time
 
 // TODO: Make it a child of QObject
 

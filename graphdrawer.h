@@ -15,6 +15,7 @@ class GraphDrawer : public QGraphicsScene
 
     qreal _vertex_diameter;
     qreal _scale;
+    qreal _label_offset;
 
     QPen _vertex_outline_pen;
     QPen _edge_pen;
@@ -29,6 +30,8 @@ public:
 
     void drawVertex(QString id);
     void drawEdge(QString id1, QString id2);
+
+    void connectWithAllTheOthers(QString id);
 };
 
 #endif // GRAPHDRAWER_H

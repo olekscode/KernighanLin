@@ -5,9 +5,8 @@ Vertex::Vertex()
     _color.setRgb(255, 255, 255);
 
     // TEMPORARY
-    srand(time(nullptr));
-    _x = rand() % 200;
-    _y = rand() % 200;
+    _x = rand() % 500;
+    _y = rand() % 500;
 }
 
 QColor Vertex::color() const

@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QHash>
 #include <QVector>
-#include <QPair>
 #include <QDebug>
 
 #include "vertex.h"
@@ -14,17 +13,20 @@ class Graph : public QObject
 {
     Q_OBJECT
 
+    // Probably, it would be better to use arrays and matrices
+    // instead of hash-tables
     QHash<QString, Vertex> _vertices;
-    int** _adj_mtrx;
+    QHash<QString, QHash<QString, int>> _adj_mtrx;
 
 public:
-    Graph();
-    ~Graph();
+    Graph() = default;
+    ~Graph() = default;
 
-    Graph(const Graph& other);
+    Graph(const Graph& other) = default;
     Graph& operator= (const Graph& other);
 
     QHash<QString, Vertex> vertices() const;
+    QHash<QString, QHash<QString, int>> weights() const;
 
     // CREATE
     void addVertex(QString id);
@@ -32,15 +34,11 @@ public:
 
     // READ, UPDATE
     Vertex& operator[] (QString id);
-    int weightBetween(QString id1, QString id2) const;
+    int weight(QString id1, QString id2) const;
 
     // DELETE
     void deleteVertex(QString id);
-
-private:
-    int _index_of_vertex(QString id) const;
-    void _increase_adj_mtrx();
-    void _decrease_adj_mtrx();
+    void clear();
 };
 
 #endif // GRAPH_H

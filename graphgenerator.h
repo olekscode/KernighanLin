@@ -14,7 +14,7 @@ class GraphGenerator : public QObject
 public:
     GraphGenerator(GraphController* graphController);
 
-    void generate(int vertices, int edges);
+    void generate(int vertices);
 };
 
 #endif // GRAPHGENERATOR_H

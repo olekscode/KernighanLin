@@ -24,10 +24,12 @@ public:
     ~MainWindow();
 
 private slots:
+    void loadVerticesNames();
+
     void on_addVertexButton_clicked();
     void on_addEdgeButton_clicked();
-    void loadVerticesNames();
     void on_generateButton_clicked();
+    void on_runButton_clicked();
 
 private:
     Ui::MainWindow *ui;
